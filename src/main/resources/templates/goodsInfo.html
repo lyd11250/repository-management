@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/colResizable-1.3.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+        function getAll(){
+            $.ajax({
+                url: "good/list" ,//请求的地址(必须写)
+                type: "GET",//指定请求的方式（get、post）
+                cache: false,  //发送相同的请求是否从缓存中读取数据
+                success: function(data){//data 接受后台响应数据
+                    var tableHtml = "<table class='list_table'><thead><tr>";
+                    tableHtml += "<th>编号</th><th>名称</th><th>价格</th><th>供应商</th><th>货品介绍</th>";
+                    tableHtml += "</thead><tbody>"
+                    for(var i = 0;i<data.length;i++){
+                        tableHtml += "<tr><td>"+data[i].id+"</td>";
+                        tableHtml += "<td>"+data[i].name+"</td>";
+                        tableHtml += "<td>"+data[i].price+"</td>";
+                        tableHtml += "<td>"+data[i].sp_name+"</td>";
+                        tableHtml += "<td>"+data[i].intro+"</td>";
+                    }
+                    tableHtml = tableHtml +"</tbody></table>"
+                    $(".table-responsive").empty();
+                    $(".table-responsive").append(tableHtml);
+
+                },//如果请求成功的话，要做什么操作
+                error: function(){},//如果请求失败的话，要做什么操作
+            })
+        }
+    </script>
+    <title>货品信息</title>
+</head>
+<body style="margin: 10px" onload="getAll()">
+    <div class="top-bar">
+        <button class="btn btn82 btn_add" onclick=changePath('addGood.html','新增商品')>新增</button>
+        <button class="btn btn82 btn_search" onclick=getAll()>刷新</button>
+    </div>
+    <div class="table-responsive" style="margin-top: 10px"></div>
+</body>
+</html>
