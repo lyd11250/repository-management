@@ -27,3 +27,8 @@ $(function(){
     }
  
 });
+
+function changePath(path, location) {
+	$(".main iframe").attr("src", path);
+	$("#here_area").text("当前位置：" + location);
+}
