@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lyd.management.dao.EmployeeMapper">
+    <select id="loadEmpByUsername" resultType="com.lyd.management.model.Employee">
+        select * from employee where userName = #{username}
+    </select>
+
+    <insert id="doReg" parameterType="com.lyd.management.model.Employee">
+        insert into employee (employeeName, userName, phone, email, status, departmentId, password, role) values (#{employeeName}, #{userName}, #{phone}, #{email}, #{status}, #{departmentId}, #{password}, #{role})
+    </insert>
+
+    <select id="getAllEmpsByStatus" resultType="com.lyd.management.model.Employee">
+        select * from employee where status = #{status}
+    </select>
+
+    <select id="getAllEmpsByStatusPage" resultType="com.lyd.management.model.Employee">
+        select * from employee where status = #{status} limit #{page},#{pageSize};
+    </select>
+
+    <update id="updateStatus">
+        update employee set status = #{status} where employeeId = #{employeeId};
+    </update>
+
+    <select id="getEmpById" resultType="com.lyd.management.model.Employee">
+        select * from employee where employeeId = #{employeeId}
+    </select>
+
+    <select id="getEmpsByDepId" resultType="com.lyd.management.model.Employee">
+        select * from employee where departmentId = #{depId}
+    </select>
+
+    <select id="queryAllEmpsByEntity" resultType="com.lyd.management.model.Employee">
+        select * from employee where status = #{emp.status}
+        <if test="emp.employeeName!=null">
+            and employeeName like concat('%',#{emp.employeeName},'%')
+        </if>
+        <if test="emp.userName!=null">
+            and userName like concat('%',#{emp.userName},'%')
+        </if>
+        limit #{page},#{pageSize};
+    </select>
+
+    <delete id="delEmpById">
+        delete from employee where employeeId = #{employeeId};
+    </delete>
+</mapper>
