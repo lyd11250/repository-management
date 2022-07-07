@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/common.css">
@@ -81,10 +81,10 @@
                 <div class="help_info">
                     <a href="1" id="hp">&nbsp;</a>
                     <a href="2" id="gy">&nbsp;</a>
-                    <a href="3" id="out">&nbsp;</a>
+                    <a href="/logout" id="out">&nbsp;</a>
                 </div>
                 <div class="info_center">
-                    admin
+                    <a href="javascript:;" style="color: black"><span th:text="${session.currentUser.userName}"/></a>
                     <span id="nt">通知</span><span><a href="#" id="notice">3</a></span>
                 </div>
             </div>

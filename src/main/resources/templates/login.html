@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="UTF-8">
 
@@ -20,17 +20,23 @@
 	<div id="login_center">
 		<div id="login_area">
 			<div id="login_form">
-				<form action="index.html" method="post">
+				<form action="/doLogin" method="post">
 					<div id="login_tip">
 						用户登录&nbsp;&nbsp;UserLogin
 					</div>
-					<div><input type="text" class="username"></div>
-					<div><input type="text" class="pwd"></div>
+					<div><input type="text" name="username" class="username"></div>
+					<div><input type="password" name="password" class="pwd"></div>
 					<div id="btn_area">
-						<input type="submit" name="submit" id="sub_btn" value="登&nbsp;&nbsp;录">&nbsp;&nbsp;
-						<input type="text" class="verify">
-						<img src="images/login/verify.png" alt="" width="80" height="40">
+
+						<input type="text" name="code" class="verify">
+						<img src="/getCode" alt="" width="80" height="40" id="codeImg">
+						<a href="javascript:void(0);" id="changeCode">看不清，换一张</a>
 					</div>
+					<div>
+						<input type="submit" name="submit" id="sub_btn" value="登&nbsp;&nbsp;录" >&nbsp;&nbsp;
+						<span th:text="${error}" style="color:red;">消息提示</span>
+					</div>
+
 				</form>
 			</div>
 		</div>
@@ -40,3 +46,10 @@
 	</div>
 </body>
 </html>
+<script>
+	//刷新验证码
+	$(document).on('click','#changeCode',function(){
+		var img=document.getElementById("codeImg");
+		img.src="/getCode?"+new Date().getTime();
+	});
+</script>
