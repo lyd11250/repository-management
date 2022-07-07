@@ -34,14 +34,14 @@
                 <table class="form_table" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                         <td>仓库名称</td>
-                        <td><input type="text" name="rmName" class="input-text lh25" size="10"></td>
+                        <td><input type="text" name="rmName" id="rmName" class="input-text lh25" size="10"></td>
                         <td>管理部门</td>
                         <td>
                     <span class="fl">
                       <div class="select_border">
                         <div class="select_containers ">
-                        <select name="rmDepart" class="select">
-                        <option>生产部</option>
+                        <select name="rmDepart" id="rmDepart" class="select">
+                        <option selected = "selected">生产部</option>
                         <option>劳保部</option>
                         <option>销售部</option>
                         <option>安全部</option>
@@ -54,11 +54,11 @@
                     <tr>
                         </td>
                         <td>管理员</td>
-                        <td><input type="text" name="rmManager" class="input-text lh25" size="10"></td>
+                        <td><input type="text" name="rmManager" id="rmManager" class="input-text lh25" size="10"></td>
                         <td>电话</td>
-                        <td><input type="text" name="rmMphone" class="input-text lh25" size="10"></td>
+                        <td><input type="text" name="rmMphone" id="rmMphone" class="input-text lh25" size="10"></td>
                         <td>仓库面积</td>
-                        <td><input type="text" name="rmArea" class="input-text lh25" size="10"></td>
+                        <td><input type="text" name="rmArea" id="rmArea" class="input-text lh25" size="10"></td>
                     </tr>
                 </table>
             </div>
@@ -72,13 +72,7 @@
     </div>
 </div>
 <script>
-    function returnInfo(){
-        $(name='rmName').empty();
-        $(name='rmDepart').empty();
-        $(name='rmManager').empty();
-        $(name='rmMphone').empty();
-        $(name='rmArea').empty();
-    }
+
     function getAllInfo(){
         $.ajax({
         //dataType:  "json",//服务器返回的数据类型
@@ -124,6 +118,14 @@
         $(".table-responsive").empty();
         $("#search_bar").show();
 
+    }
+    function returnInfo(){
+        saveOrUpdate = -1;
+        document.getElementById('rmName').value='';
+        document.getElementById('rmDepart').value='生产部';
+        document.getElementById('rmManager').value='';
+        document.getElementById('rmMphone').value='';
+        document.getElementById('rmArea').value='';
     }
     var saveOrUpdate = -1;
     $("#addInfo").click(function (){
