@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface SupplierService {
     List<Supplier> getSupplierListService();
-    Supplier getSupplierByIdService(int id);
+    Supplier getSupplierByIdService(int spId);
     Boolean removeSupplierService(int spId);
     boolean addSupplierService(Supplier supplier);
     boolean editSupplierService(Supplier supplier);

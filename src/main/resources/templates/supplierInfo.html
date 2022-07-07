@@ -118,13 +118,15 @@
         var spPhone =  $("input[name='spPhone']").val();
         var spGoods =  $("input[name='spGoods']").val();
         var sendData =  "spName="+spName+"&spCon="+spCon+"&spAdd="+spAdd+"&spPhone="+spPhone+"&spGoods="
-            +spGoods+"&spId"+spId;
+            +spGoods+"&spId="+spId;
+        console.log(sendData);
         if (saveOrUpdate == -1){
             $.ajax({
                 url:"supplier/new",
                 data:sendData,
                 type:"POST",
                 success:function(data){
+                    console.log(data);
                     if (data){
                         alert("添加成功")
                         $(".table-responsive").empty();
