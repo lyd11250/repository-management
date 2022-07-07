@@ -3,13 +3,12 @@ package com.lyd.management.controller;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.ShearCaptcha;
 import com.lyd.management.model.Employee;
-import com.lyd.management.service.EmployeeService;
+import com.lyd.management.service.impl.EmployeeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +38,7 @@ public class LoginController {
             }else {
                 httpSession.setAttribute("currentUser",employee);
                 System.out.println("success");
-                return "/index";
+                return "/index.html";
             }
         }else {
             model.addAttribute("error", "验证码错误");
