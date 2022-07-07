@@ -65,6 +65,31 @@
             $('#good-' + id + ' button:eq(0)').addClass("btn_save2");
             $('#good-' + id + ' button:eq(0)').html("保存");
             $('#good-' + id + ' button:eq(0)').attr("onclick", "saveEdit(" + id + ")");
+            $('#good-' + id + ' button:eq(1)').removeClass("btn_recycle");
+            $('#good-' + id + ' button:eq(1)').addClass("btn_res");
+            $('#good-' + id + ' button:eq(1)').html("取消");
+            $('#good-' + id + ' button:eq(1)').attr("onclick", "cancelEdit(" + id + ")");
+        }
+        function cancelEdit(id) {
+            $.ajax({
+                url: "good/select" ,//请求的地址(必须写)
+                type: "GET",//指定请求的方式（get、post）
+                cache: false,  //发送相同的请求是否从缓存中读取数据
+                data: "id="+id,
+                success: function(data){//data 接受后台响应数据
+                    let currentRow = $("#good-" + id);
+                    let tableHtml = "<td>" + id + "</td>";
+                    tableHtml += "<td>" + data.name + "</td>";
+                    tableHtml += "<td>" + data.price + "</td>";
+                    tableHtml += "<td>" + data.supplierID + "</td>";
+                    tableHtml += "<td>" + data.intro + "</td>";
+                    tableHtml += "<td><button class='btn btn82 btn_add' onclick=editGood(" + id + ")>修改</button>";
+                    tableHtml += "<button class='btn btn82 btn_recycle' style='margin-left: 10px' onclick=deleteGood(" + id + ")>删除</button></td>";
+                    currentRow.html(tableHtml);
+
+                },//如果请求成功的话，要做什么操作
+                error: function(){},//如果请求失败的话，要做什么操作
+            })
         }
 
         function saveEdit(id) {
