@@ -27,6 +27,11 @@ public class GoodController {
         return goodService.selectAllService();
     }
 
+    @RequestMapping(value = "/select")
+    public Good selectById(int id) {
+        return goodService.selectByIdService(id);
+    }
+
     @PostMapping(value = "/delete")
     public boolean deleteById(int id) {
         return goodService.deleteByIdService(id);

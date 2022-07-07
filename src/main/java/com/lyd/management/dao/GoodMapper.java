@@ -1,10 +1,7 @@
 package com.lyd.management.dao;
 
 import com.lyd.management.model.Good;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -12,6 +9,9 @@ import java.util.List;
 public interface GoodMapper {
 
     List<Good> selectAll();
+
+    @Select("select id, name, price, supplier_id, intro from goods where id = #{id}")
+    Good selectById(int id);
 
     @Delete("delete from goods where id = #{id}")
     boolean deleteById(int id);

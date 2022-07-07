@@ -4,9 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lyd.management.dao.GoodMapper">
     <select id="selectAll" resultType="Good">
-        select id,name,price,sp_name,intro
-        from goods A, re_supplier B
-        where A.supplier_id=B.sp_id
-        order by id;
+        select id,name,price,supplier_id,intro from goods
     </select>
 </mapper>

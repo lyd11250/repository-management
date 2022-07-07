@@ -18,6 +18,11 @@ public class GoodServiceImpl implements GoodService {
     }
 
     @Override
+    public Good selectByIdService(int id) {
+        return goodMapper.selectById(id);
+    }
+
+    @Override
     public boolean deleteByIdService(int id) {
         return goodMapper.deleteById(id);
     }
