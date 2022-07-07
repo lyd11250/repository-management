@@ -22,6 +22,10 @@ public class RepoController {
         List<RmRepository> repositoryList = repoServiceImpl.getRepositoryList();
         return repositoryList;
     }
+    @RequestMapping(value="/selete")
+    public RmRepository seleteRepoById(int id){
+        return repoServiceImpl.selectRepoByIdService(id);
+    }
     @PostMapping(value = "/delete")//这个注解可以映射到get请求方式
     public Boolean deleteRepoList(String id){//如果前端传的参数类型是字符串那么可以使用相同的参数名来接受参数（eg：前端的参数名是id，那么方法中的参数名也是id）
         System.out.println(id);

@@ -20,6 +20,11 @@ public class RepoServiceImpl implements RmRepositoryService {
     }
 
     @Override
+    public RmRepository selectRepoByIdService(int id) {
+        return repositoryMapper.selectRepoById(id);
+    }
+
+    @Override
     public Boolean removerRepositoryService(int id) {
         boolean result = repositoryMapper.deleteRepoById(id);
         return result;
