@@ -45,7 +45,6 @@ public class SupplierController {
 
     @RequestMapping("/edit")
     public boolean editSupplier(Supplier supplier){
-
         boolean result = supplierService.editSupplierService(supplier);
         return result;
     }

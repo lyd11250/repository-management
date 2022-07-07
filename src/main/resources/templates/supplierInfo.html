@@ -15,17 +15,157 @@
     <!--引入js文件-->
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/style.css">
-
     <link rel="stylesheet" href="css/main.css">
+
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery.SuperSlide.js"></script>
-    <script type="text/javascript" src = "js/getSupplierInfo.js"></script>
     <script type="text/javascript" src = "js/deleteSupplier.js"></script>
-    <script type="text/javascript" src = "js/addSupplier.js"></script>
 </head>
 <body onload="getAllSupplier()" style="margin: 10px">
-<input type="button" name="button" class="btn btn82 btn_add" id ="add" value="新增" onclick=parent.changePath('/addSupplierInfo.html','添加信息')>
+<input type="button" name="button" class="btn btn82 btn_add" id ="add" value="新增" onclick="showSupplierAddInfo()"><!--parent.changePath('/repoAddInfo.html','添加信息')-->
 <div class="table-responsive" style="margin-top: 10px"></div>
+<!--添加供应商-->
+<div id="search_bar" class="mt10">
+    <div class="box">
+        <div class="box_border">
+            <div class="box_top"><b class="pl15">添加供应商</b></div>
+            <div class="box_center pt10 pb10">
+                <table class="form_table" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td>公司名称</td>
+                        <td><input type="text" name="spName" id="spName" class="input-text lh25" size="10"></td>
+                        <td>联系人</td>
+                        <td><input type="text" name="spCon" id="spCon" class="input-text lh25" size="10"></td>
+                        <td>公司地址</td>
+                        <td><input type="text" name="spAdd" id="spAdd" class="input-text lh25" size="10"></td>
+                        <td>联系电话</td>
+                        <td><input type="text" name="spPhone" id="spPhone" class="input-text lh25" size="10"></td>
+                        <td>供应商品</td>
+                        <td><input type="text" name="spGoods" id="spGoods" class="input-text lh25" size="10"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="box_bottom pb5 pt5 pr10" style="border-top:1px solid #dadada;">
+                <div class="search_bar_btn" style="text-align:right;">
+                    <input type="button" value="返回" onclick="returnSupplierInfo();getAllSupplier()" class="ext_btn">
+                    <input type="button" id="addSupplierInfo" value="保存" class="ext_btn">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+    function getAllSupplier(){
+        $.ajax({
+            //dataType:  "json",//服务器返回的数据类型
+            //data:"",  //发生给服务器的数据，如果请求是查询所有数据，一般不需要传值
+            url: "supplier/list" ,//请求的地址(必须写)
+            type: "GET",//指定请求的方式（get、post）
+            cache:false,  //发送相同的请求是否从缓存中读取数据
+            success:function (data){//data 接受后台响应数据
+                var tableHtml = "<table class='list_table'>";
+                tableHtml = tableHtml+"<thead><tr><th>公司名称</th><th>联系人</th><th>公司地址</th>";
+                tableHtml = tableHtml+"<th>联系电话</th><th>供应商品</th><th>操作</th></thead>";
+                tableHtml = tableHtml +"<tbody>"
+                for(var i = 0;i<data.length;i++){
+                    tableHtml = tableHtml + "<tr><td>"+data[i].spName+"</td>";
+                    tableHtml = tableHtml + "<td>"+data[i].spCon+"</td>";
+                    tableHtml = tableHtml + "<td>"+data[i].spAdd+"</td>";
+                    tableHtml = tableHtml + "<td>"+data[i].spPhone+"</td>";
+                    tableHtml = tableHtml + "<td>"+data[i].spGoods+"</td>";
+                    tableHtml = tableHtml +"<td><button className='btn btn82 btn_add' onclick=editSupplierInfo("+JSON.stringify(data[i])+")>修改</button>";
+                    tableHtml = tableHtml +"<button className='btn btn82 btn_add' onclick='deleteSupplierInfo("+data[i].spId+")' >删除</button></td></tr>";
+                    // tableHtml = tableHtml+ "<td><a href='javascript:void(0)' class='label xiugai'>修改</a>";
+                    /*JSON是一个js提供json字符串工具
+                    * JSON字符串：通常用于作为前后端数据传输的方式。格式：{"参数名":参数值}
+                    * JSON.parse()--把json字符串解析成对象
+                    * */
+                    // tableHtml = tableHtml+ "<td><a href='javascript:void(0)' class='label xiugai' onclick='editUser("+JSON.stringify(data[i])+")'>修改</a>"
+                    // /*绑定事件1.获取到标签之后绑定 2.在标签中通过属性方式来绑定（事件名=‘绑定的函数名’）*/
+                    // tableHtml = tableHtml+ "<a href='javascript:void(0)' class='label shanchu' onclick='deleteUser("+data[i].id+")'>删除</a></td></tr>"
+                }
+                tableHtml = tableHtml +"</tbody></table>";
+                $(".table-responsive").empty();//清除掉原有的数据
+                $(".table-responsive").append(tableHtml);
+                $("#search_bar").hide();
+            },
+            error:function (){},//如果请求失败的话，要做什么操作
+        })
+    }
+</script>
+<script>
+    function showSupplierAddInfo(){
+        $(".table-responsive").empty();
+        $("#search_bar").show();
+
+    }
+    function returnSupplierInfo(){
+        saveOrUpdate = -1;
+        document.getElementById('spName').value='';
+        document.getElementById('spCon').value='';
+        document.getElementById('spAdd').value='';
+        document.getElementById('spPhone').value='';
+        document.getElementById('spGoods').value='';
+    }
+    var saveOrUpdate = -1;
+    $("#addSupplierInfo").click(function (){
+        // console.log("test");
+        //发送的数据
+        // var rmName1 = jQuery("#rmName").val();
+        var spName =  $("input[name='spName']").val();
+        var spCon = $("input[name='spCon']").val();
+        var spAdd =  $("input[name='spAdd']").val();
+        var spPhone =  $("input[name='spPhone']").val();
+        var spGoods =  $("input[name='spGoods']").val();
+        var sendData =  "spName="+spName+"&spCon="+spCon+"&spAdd="+spAdd+"&spPhone="+spPhone+"&spGoods="
+            +spGoods+"&spId"+spId;
+        if (saveOrUpdate == -1){
+            $.ajax({
+                url:"supplier/new",
+                data:sendData,
+                type:"POST",
+                success:function(data){
+                    if (data){
+                        alert("添加成功")
+                        $(".table-responsive").empty();
+                        getAllSupplier();
+                    }else{
+                        alert("添加失败")
+                    }
+                }
+            })
+        }else if (saveOrUpdate == 1){//修改操作
+            $.ajax({
+                url:"supplier/edit",
+                data:sendData,
+                type:"POST",
+                success:function(data){
+                    console.log(data);
+                    if (data){
+                        alert("修改成功")
+                        $(".table-responsive").empty();
+                        getAllSupplier();
+                    }else{
+                        alert("修改失败")
+                    }
+                }
+            })
+            saveOrUpdate == -1;//改回操作标志，避免一直发送修改请求
+        }})
+    //编辑操作
+    var spId = 0;
+    function editSupplierInfo(supplier){
+        // alert("test")
+        var spName =  $("input[name='spName']").val(supplier.spName);
+        var spCon =  $("input[name='spCon']").val(supplier.spCon);
+        var spAdd =  $("input[name='spAdd']").val(supplier.spAdd);
+        var spPhone =  $("input[name='spPhone']").val(supplier.spPhone);
+        var spGoods =  $("input[name='spGoods']").val(supplier.spGoods);
+        $(".table-responsive").empty();
+        $("#search_bar").show();
+        saveOrUpdate = 1;//表示现在是修改操作
+        spId = supplier.spId;
+    }
+</script>
 </body>
 </html>
