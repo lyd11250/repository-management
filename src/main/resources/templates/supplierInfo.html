@@ -112,13 +112,14 @@
         // console.log("test");
         //发送的数据
         // var rmName1 = jQuery("#rmName").val();
+        returnSupplierInfo();
         var spName =  $("input[name='spName']").val();
         var spCon = $("input[name='spCon']").val();
         var spAdd =  $("input[name='spAdd']").val();
         var spPhone =  $("input[name='spPhone']").val();
         var spGoods =  $("input[name='spGoods']").val();
         var sendData =  "spName="+spName+"&spCon="+spCon+"&spAdd="+spAdd+"&spPhone="+spPhone+"&spGoods="
-            +spGoods+"&spId"+spId;
+            +spGoods+"&spId="+spId;
         if (saveOrUpdate == -1){
             $.ajax({
                 url:"supplier/new",
