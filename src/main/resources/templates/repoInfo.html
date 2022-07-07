@@ -23,7 +23,7 @@
     <script type="text/javascript" src = "js/deleteRepo.js"></script>
 </head>
 <body onload="getAllInfo()" style="margin: 10px">
-<input type="button" name="button" class="btn btn82 btn_add" id ="add" value="新增" onclick=showAddInfo()><!--parent.changePath('/repoAddInfo.html','添加信息')-->
+<input type="button" name="button" class="btn btn82 btn_add" id ="add" value="新增" onclick="showAddInfo()"><!--parent.changePath('/repoAddInfo.html','添加信息')-->
     <div class="table-responsive" style="margin-top: 10px"></div>
     <!--添加仓库-->
     <div id="search_bar" class="mt10">
@@ -64,7 +64,7 @@
             </div>
             <div class="box_bottom pb5 pt5 pr10" style="border-top:1px solid #dadada;">
                 <div class="search_bar_btn" style="text-align:right;">
-                    <input type="button" value="返回" onclick="location.href='javascript:history.go(-1)'" class="ext_btn">
+                    <input type="button" value="返回" onclick="returnInfo();getAllInfo()" class="ext_btn">
                     <input type="button" id="addInfo" value="保存" class="ext_btn">
                 </div>
             </div>
@@ -72,6 +72,13 @@
     </div>
 </div>
 <script>
+    function returnInfo(){
+        $(name='rmName').empty();
+        $(name='rmDepart').empty();
+        $(name='rmManager').empty();
+        $(name='rmMphone').empty();
+        $(name='rmArea').empty();
+    }
     function getAllInfo(){
         $.ajax({
         //dataType:  "json",//服务器返回的数据类型
@@ -166,10 +173,10 @@
     //编辑操作
     var id = 0;
     function editRepo(Repo){
-        alert("test")
+        // alert("test")
         console.log(Repo)
         var rName =  $("input[name='rmName']").val(Repo.rmName);
-        var rManager =  $("input[name='rmCManager']").val(Repo.rmManager);
+        var rManager =  $("input[name='rmManager']").val(Repo.rmManager);
         var rmDepart = Repo.rmDepart;
         var rDepart = $("select[name='rmDepart'] option").each(function(){
             if ($(this).text() == rmDepart){
