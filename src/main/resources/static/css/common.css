@@ -57,3 +57,6 @@ select{*vertical-align: top;}
 .wh100{width: 100px;}
 /*配色表*/
 .color307fb1{color: #307fb1;}
+.hide{
+	display: none;
+}

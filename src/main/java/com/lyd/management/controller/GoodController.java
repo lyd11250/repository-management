@@ -5,6 +5,7 @@ import com.lyd.management.service.impl.GoodServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,10 +19,31 @@ public class GoodController {
     @Autowired
     GoodServiceImpl goodService;
     //定义一个方法来处理一个请求
+
     @GetMapping(value="/list")//这个注解可以映射到get请求方式
     public List<Good> goodList(){
         //调用service层的方法来处理请求逻辑
         //UserServiceImpl userService= new UserServiceImpl();
         return goodService.selectAllService();
+    }
+
+    @RequestMapping(value = "/select")
+    public Good selectById(int id) {
+        return goodService.selectByIdService(id);
+    }
+
+    @PostMapping(value = "/delete")
+    public boolean deleteById(int id) {
+        return goodService.deleteByIdService(id);
+    }
+
+    @RequestMapping(value = "/add")
+    public boolean addGood(Good good) {
+        return goodService.addGoodService(good);
+    }
+
+    @RequestMapping(value = "/edit")
+    public boolean editGood(Good good) {
+        return goodService.editGoodService(good);
     }
 }

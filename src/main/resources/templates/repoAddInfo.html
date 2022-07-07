@@ -4,56 +4,11 @@
     <meta charset="UTF-8">
     <title>添加仓库</title>
     <link rel="stylesheet" href="css/main.css">
-    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/jquery.SuperSlide.js"></script>
+    <script type="text/javascript" src="js/getRepoInfo.js"></script>
 <!--    <script type="text/javascript" src = "js/addRepo.js"></script>-->
-    <script>
-        var saveOrUpdate = -1;
-        $("#btn-add1").click(function save(){
-            console.log("test");
-            //发送的数据
-            // var rmName1 = jQuery("#rmName").val();
-            var rmName =  $("input[name='rmName']").val();
-            console.log("rmName");
-            var rmDepart = $("select[name='rmDepart'] option:selected").text();
-            var rmManager = $("input[name='rmManager']").val();;
-            var rmMphone =  $("input[name='rmMphone']").val();
-            var rmArea =  $("input[name='rmArea']").val();
-            var sendData =  "rmName="+rmName+"&rmDepart="+rmDepart+"&rmManager="+rmManager+"&rmMphone="+rmMphone+"&rmArea="
-                +rmArea+"&id="+id;
-            if (saveOrUpdate == -1){
-                $.ajax({
-                    url:"Repository/new",
-                    data:sendData,
-                    type:"POST",
-                    success:function(data){
-                        if (data){
-                            alert("添加成功")
-                            $(".table-responsive").empty();
-                            getAllInfo();
-                        }else{
-                            alert("添加失败")
-                        }
-                    }
-                })
-            }else if (saveOrUpdate == 1){//修改操作
-                $.ajax({
-                    url:"Repository/edit",
-                    data:sendData,
-                    type:"POST",
-                    success:function(data){
-                        if (data){
-                            alert("修改成功")
-                            $(".table-responsive").empty();
-                            getAllInfo();
-                        }else{
-                            alert("修改失败")
-                        }
-                    }
-                })
-                saveOrUpdate == -1;//改回操作标志，避免一直发送修改请求
-            }})
-    </script>
+
 </head>
 <body>
 <div id="search_bar" class="mt10">
@@ -64,7 +19,7 @@
                 <table class="form_table" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                         <td>仓库名称</td>
-                        <td><input type="text" name="rmName" id="rmName" class="input-text lh25" size="10"></td>
+                        <td><input type="text" name="rmName" class="input-text lh25" size="10"></td>
                         <td>管理部门</td>
                         <td>
                     <span class="fl">
@@ -95,12 +50,79 @@
             <div class="box_bottom pb5 pt5 pr10" style="border-top:1px solid #dadada;">
                 <div class="search_bar_btn" style="text-align:right;">
                     <input type="button" value="返回" onclick="location.href='javascript:history.go(-1)'" class="ext_btn">
-                    <button id="btn-add1" >添加</button>
+                    <input type="button" id="addInfo" value="保存" class="ext_btn">
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<script>
+    var saveOrUpdate = -1;
+    $("#addInfo").click(function (){
+        console.log("test");
+        //发送的数据
+        // var rmName1 = jQuery("#rmName").val();
+        var rmName =  $("input[name='rmName']").val();
+        console.log("rmName");
+        var rmDepart = $("select[name='rmDepart'] option:selected").text();
+        var rmManager = $("input[name='rmManager']").val();
+        var rmMphone =  $("input[name='rmMphone']").val();
+        var rmArea =  $("input[name='rmArea']").val();
+        var sendData =  "rmName="+rmName+"&rmDepart="+rmDepart+"&rmManager="+rmManager+"&rmMphone="+rmMphone+"&rmArea="
+            +rmArea+"&id="+id;
+        if (saveOrUpdate == -1){
+            $.ajax({
+                url:"Repository/new",
+                data:sendData,
+                type:"POST",
+                success:function(data){
+                    if (data){
+                        alert("添加成功")
+                        $(".table-responsive").empty();
+                        getAllInfo();
+                    }else{
+                        alert("添加失败")
+                    }
+                }
+            })
+        }else if (saveOrUpdate == 1){//修改操作
+            $.ajax({
+                url:"Repository/edit",
+                data:sendData,
+                type:"POST",
+                success:function(data){
+                    if (data){
+                        alert("修改成功")
+                        $(".table-responsive").empty();
+                        getAllInfo();
+                    }else{
+                        alert("修改失败")
+                    }
+                }
+            })
+            saveOrUpdate == -1;//改回操作标志，避免一直发送修改请求
+        }})
+    //编辑操作
+    var id = 0;
+    function editRepo(Repo){
+        alert("test")
+        console.log(Repo)
+        var rName =  $("input[name='rmName']").val(Repo.rmName);
+        var rManager =  $("input[name='rmManager']").val(Repo.rmManager);
+        var rmDepart = Repo.rmDepart;
+        var rDepart = $("select[name='rmDepart'] option").each(function(){
+            if ($(this).text() == rmDepart){
+                $(this).prop("selected",true);
+            }
+        });
+        var rMphone = $("input[name='rmMphone']").val(Repo.rmMphone);
+        var rArea =  $("input[name='rmArea']").val(Repo.rmArea);
+        // var sendData =  "rmName="+rmName+"&rmDepart="+rmDepart+"&rmManager="+rmManager+"&rmMphone="+rmMphone+"&rmArea="
+        //     +rmArea+"&id="+id;
+        $(".table-responsive").empty();
+        saveOrUpdate = 1;//表示现在是修改操作
+        id = Repo.id;
+    }
+</script>
 </body>
 </html>

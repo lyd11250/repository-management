@@ -7,6 +7,6 @@ public class Good {
     private Integer id;
     private String name;
     private Double price;
-    private Integer supplier_id;
+    private Integer supplierId;
     private String intro;
 }

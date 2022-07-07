@@ -16,4 +16,24 @@ public class GoodServiceImpl implements GoodService {
     public List<Good> selectAllService() {
         return goodMapper.selectAll();
     }
+
+    @Override
+    public Good selectByIdService(int id) {
+        return goodMapper.selectById(id);
+    }
+
+    @Override
+    public boolean deleteByIdService(int id) {
+        return goodMapper.deleteById(id);
+    }
+
+    @Override
+    public boolean addGoodService(Good good) {
+        return goodMapper.addGood(good);
+    }
+
+    @Override
+    public boolean editGoodService(Good good) {
+        return goodMapper.editGood(good);
+    }
 }

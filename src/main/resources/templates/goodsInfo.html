@@ -14,30 +14,140 @@
                 type: "GET",//指定请求的方式（get、post）
                 cache: false,  //发送相同的请求是否从缓存中读取数据
                 success: function(data){//data 接受后台响应数据
-                    var tableHtml = "<table class='list_table'><thead><tr>";
-                    tableHtml += "<th>编号</th><th>名称</th><th>价格</th><th>供应商</th><th>货品介绍</th>";
+                    let tableHtml = "<table class='list_table'><thead><tr>";
+                    tableHtml += "<th>编号</th><th>名称</th><th>价格</th><th>供应商</th><th>货品介绍</th><th style='width: 184px'>操作</th>";
                     tableHtml += "</thead><tbody>"
                     for(var i = 0;i<data.length;i++){
-                        tableHtml += "<tr><td>"+data[i].id+"</td>";
+                        tableHtml += "<tr id='good-" + data[i].id + "'><td>"+data[i].id+"</td>";
                         tableHtml += "<td>"+data[i].name+"</td>";
                         tableHtml += "<td>"+data[i].price+"</td>";
                         tableHtml += "<td>"+data[i].sp_name+"</td>";
                         tableHtml += "<td>"+data[i].intro+"</td>";
+                        tableHtml += "<td><button class='btn btn82 btn_add' onclick=editGood(" + data[i].id + ")>修改</button>";
+                        tableHtml += "<button class='btn btn82 btn_recycle' style='margin-left: 10px' onclick=deleteGood(" + data[i].id + ")>删除</button></td>";
                     }
                     tableHtml = tableHtml +"</tbody></table>"
                     $(".table-responsive").empty();
-                    $(".table-responsive").append(tableHtml);
+                    $('.table-responsive').append(tableHtml);
 
                 },//如果请求成功的话，要做什么操作
                 error: function(){},//如果请求失败的话，要做什么操作
             })
+        }
+        function addGood() {
+            let newRow = document.getElementsByClassName("tr-new");
+            if (newRow.length == 0) {
+                let tableHtml = "<tr class='tr-new'><td></td>";
+                tableHtml += "<td><input type='text' class='input-text good-name'></td>";
+                tableHtml += "<td><input type='number' class='input-text good-price'></td>";
+                tableHtml += "<td><select></td>";
+                tableHtml += "<td><input type='text' class='input-text good-intro'></td>";
+                tableHtml += "<td><button class='btn btn82 btn_save2' onclick='saveEdit(0)'>保存</button>";
+                tableHtml += "<button class='btn btn82 btn_res' style='margin-left: 10px' onclick='cancelAdd()'>取消</button></td>";
+                $("tbody").append(tableHtml);
+            } else {
+                $('.tr-new .good-name').focus();
+            }
+        }
+        function cancelAdd() {
+            $('.tr-new').remove();
+        }
+        function editGood(id) {
+            let goodName = $('#good-' + id + ' td:eq(1)').html();
+            let goodPrice = $('#good-' + id + ' td:eq(2)').html();
+            let goodSupplier = $('#good-' + id + ' td:eq(3)').html();
+            let goodIntro = $('#good-' + id + ' td:eq(4)').html();
+            $('#good-' + id + ' td:eq(1)').html("<input type='text' class='input-text good-name' value=" + goodName + ">");
+            $('#good-' + id + ' td:eq(2)').html("<input type='number' class='input-text good-price' value=" + goodPrice + ">");
+            $('#good-' + id + ' td:eq(3)').html("<select><option ");
+            $('#good-' + id + ' td:eq(4)').html("<input type='text' class='input-text good-intro' value=" + goodIntro + ">");
+            $('#good-' + id + ' button:eq(0)').removeClass("btn_add");
+            $('#good-' + id + ' button:eq(0)').addClass("btn_save2");
+            $('#good-' + id + ' button:eq(0)').html("保存");
+            $('#good-' + id + ' button:eq(0)').attr("onclick", "saveEdit(" + id + ")");
+            $('#good-' + id + ' button:eq(1)').removeClass("btn_recycle");
+            $('#good-' + id + ' button:eq(1)').addClass("btn_res");
+            $('#good-' + id + ' button:eq(1)').html("取消");
+            $('#good-' + id + ' button:eq(1)').attr("onclick", "cancelEdit(" + id + ")");
+        }
+        function cancelEdit(id) {
+            $.ajax({
+                url: "good/select" ,//请求的地址(必须写)
+                type: "GET",//指定请求的方式（get、post）
+                cache: false,  //发送相同的请求是否从缓存中读取数据
+                data: "id="+id,
+                success: function(data){//data 接受后台响应数据
+                    let currentRow = $("#good-" + id);
+                    let tableHtml = "<td>" + id + "</td>";
+                    tableHtml += "<td>" + data.name + "</td>";
+                    tableHtml += "<td>" + data.price + "</td>";
+                    tableHtml += "<td>" + data.supplierID + "</td>";
+                    tableHtml += "<td>" + data.intro + "</td>";
+                    tableHtml += "<td><button class='btn btn82 btn_add' onclick=editGood(" + id + ")>修改</button>";
+                    tableHtml += "<button class='btn btn82 btn_recycle' style='margin-left: 10px' onclick=deleteGood(" + id + ")>删除</button></td>";
+                    currentRow.html(tableHtml);
+
+                },//如果请求成功的话，要做什么操作
+                error: function(){},//如果请求失败的话，要做什么操作
+            })
+        }
+
+        function saveEdit(id) {
+            // id!==0    修改
+            // id===0    新增
+            let goodName, goodPrice, goodSupplier, goodIntro, sendData;
+            if (id !== 0) {
+                goodName = $('#good-' + id + ' input.good-name').val();
+                goodPrice = $('#good-' + id + ' input.good-price').val();
+                goodIntro = $('#good-' + id + ' input.good-intro').val();
+                goodSupplier = 1;
+            } else if (id === 0){
+                goodName = $('.tr-new input.good-name').val();
+                goodPrice = $('.tr-new input.good-price').val();
+                goodIntro = $('.tr-new input.good-intro').val();
+                goodSupplier = 1;
+            }
+            sendData = "id=" + id + "&name=" + goodName + "&price=" + goodPrice +
+                "&supplierId=" + goodSupplier + "&intro=" + goodIntro;
+            console.log(sendData);
+            $.ajax({
+                url:id===0? "good/add" : "good/edit",
+                data:sendData,
+                type:"POST",
+                success:function(data){
+                    if (data){
+                        getAll();
+                    }else{
+                        alert("失败!")
+                    }
+                }
+            })
+        }
+        function deleteGood(id) {
+            console.log(id);
+            if (confirm("确认删除？")) {
+                $.ajax({
+                    url:"good/delete",
+                    data:"id="+id,
+                    type:"POST",
+                    success:function (data){
+                        if (data) {
+                            getAll();
+                        }
+                        else{
+                            alert("删除失败");
+                            getAll();
+                        }
+                    }
+                })
+            }
         }
     </script>
     <title>货品信息</title>
 </head>
 <body style="margin: 10px" onload="getAll()">
     <div class="top-bar">
-        <button class="btn btn82 btn_add" onclick=changePath('addGood.html','新增商品')>新增</button>
+        <button class="btn btn82 btn_add" onclick=addGood()>新增</button>
         <button class="btn btn82 btn_search" onclick=getAll()>刷新</button>
     </div>
     <div class="table-responsive" style="margin-top: 10px"></div>

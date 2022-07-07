@@ -18,7 +18,7 @@ function getAllInfo(){
                 tableHtml = tableHtml + "<td>"+data[i].rmManager+"</td>";
                 tableHtml = tableHtml + "<td>"+data[i].rmMphone+"</td>";
                 tableHtml = tableHtml + "<td>"+data[i].rmArea+"</td>";
-                tableHtml = tableHtml +"<td><button className='btn btn82 btn_add' >修改</button>";
+                tableHtml = tableHtml +"<td><button className='btn btn82 btn_add' onclick=editRepo("+JSON.stringify(data[i])+")>修改</button>";//parent.changePath('/repoAddInfo.html','添加信息')
                 tableHtml = tableHtml +"<button className='btn btn82 btn_add' onclick='deleteRepo("+data[i].id+")' >删除</button></td></tr>";
                 // tableHtml = tableHtml+ "<td><a href='javascript:void(0)' class='label xiugai'>修改</a>";
                 /*JSON是一个js提供json字符串工具
@@ -34,5 +34,7 @@ function getAllInfo(){
             $(".table-responsive").append(tableHtml);
         },
         error:function (){},//如果请求失败的话，要做什么操作
+
     })
+
 }
