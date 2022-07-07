@@ -19,6 +19,11 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    public Supplier getSupplierByIdService(int id) {
+        return supplierMapper.getSupplierById(id);
+    }
+
+    @Override
     public Boolean removeSupplierService(int spId) {
         boolean result = supplierMapper.deleteSupplierById(spId);
         return result;

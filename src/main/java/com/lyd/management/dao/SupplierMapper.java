@@ -9,6 +9,8 @@ import java.util.List;
 public interface SupplierMapper {
     @Select(value = {"select sp_id,sp_name,sp_con,sp_add,sp_phone,sp_goods from re_supplier"})
     List<Supplier> findSupplierList();
+    @Select("select sp_name,sp_con,sp_add,sp_phone,sp_goods from re_supplier where sp_id = #{id}")
+    Supplier getSupplierById(int id);
     @Delete(value = {"delete from re_supplier where sp_id = #{sp_id}"})
     Boolean deleteSupplierById(int spId);
     @Insert(value = {"insert into re_supplier(sp_name,sp_con,sp_add,sp_phone,sp_goods)" +

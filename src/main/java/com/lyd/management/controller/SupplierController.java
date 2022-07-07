@@ -24,6 +24,11 @@ public class SupplierController {
         return supplierList;
     }
 
+    @RequestMapping(value = "/select")
+    public Supplier getSupplierById(int id) {
+        return supplierService.getSupplierByIdService(id);
+    }
+
     @PostMapping(value = "/delete")
     public boolean deleteSupplier(String spId){
         System.out.println(spId);
