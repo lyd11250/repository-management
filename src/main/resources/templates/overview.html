@@ -17,7 +17,7 @@
                 cache: true,  //发送相同的请求是否从缓存中读取数据
                 success: function (data) {//data 接受后台响应数据
                     let tableHtml = "<table class='list_table'><thead><tr>";
-                    tableHtml += "<th>商品</th><th>仓库</th><th>数量</th><th style='width: 85px'>操作</th>";
+                    tableHtml += "<th>货品</th><th>仓库</th><th>数量</th><th style='width: 85px'>操作</th>";
                     tableHtml += "</thead><tbody>"
                     for (var i = 0; i < data.length; i++) {
                         tableHtml += "<tr><td>" + goodIdNameMap.get(data[i].goodId) + "</td>"
