@@ -100,7 +100,6 @@
 
     }
     function returnSupplierInfo(){
-        saveOrUpdate = -1;
         document.getElementById('spName').value='';
         document.getElementById('spCon').value='';
         document.getElementById('spAdd').value='';
@@ -119,6 +118,7 @@
         var spGoods =  $("input[name='spGoods']").val();
         var sendData =  "spName="+spName+"&spCon="+spCon+"&spAdd="+spAdd+"&spPhone="+spPhone+"&spGoods="
             +spGoods+"&spId="+spId;
+        returnSupplierInfo();
         console.log(sendData);
         if (saveOrUpdate == -1){
             $.ajax({
@@ -152,7 +152,7 @@
                     }
                 }
             })
-            saveOrUpdate == -1;//改回操作标志，避免一直发送修改请求
+            saveOrUpdate = -1;//改回操作标志，避免一直发送修改请求
         }})
     //编辑操作
     var spId = 0;
