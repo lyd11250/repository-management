@@ -46,4 +46,5 @@ public class GoodController {
     public boolean editGood(Good good) {
         return goodService.editGoodService(good);
     }
+
 }

@@ -2,12 +2,153 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/colResizable-1.3.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+        let goodIdNameMap = new Map();
+        let repoIdNameMap = new Map();
+
+        function getAllGoodName() {
+            $.ajax({
+                url: "good/list",//请求的地址(必须写)
+                type: "GET",//指定请求的方式（get、post）
+                cache: true,  //发送相同的请求是否从缓存中读取数据
+                success: function (data) {//data 接受后台响应数据
+                    for (var i = 0; i < data.length; i++) {
+                        let goodId = data[i].id;
+                        let goodName = data[i].name;
+                        goodIdNameMap.set(goodId, goodName);
+                    }
+                },//如果请求成功的话，要做什么操作
+                error: function () {
+                },//如果请求失败的话，要做什么操作
+            })
+        }
+
+        function getAllRepoName() {
+            $.ajax({
+                url: "Repository/list",//请求的地址(必须写)
+                type: "GET",//指定请求的方式（get、post）
+                cache: true,  //发送相同的请求是否从缓存中读取数据
+                success: function (data) {//data 接受后台响应数据
+                    for (var i = 0; i < data.length; i++) {
+                        let id = data[i].id;
+                        let name = data[i].rmName;
+                        repoIdNameMap.set(id, name);
+                    }
+                },//如果请求成功的话，要做什么操作
+                error: function () {
+                },//如果请求失败的话，要做什么操作
+            })
+        }
+
+        function getAll() {
+            getAllGoodName();
+            getAllRepoName();
+            $.ajax({
+                url: "inventory/list",//请求的地址(必须写)
+                type: "GET",//指定请求的方式（get、post）
+                cache: true,  //发送相同的请求是否从缓存中读取数据
+                success: function (data) {//data 接受后台响应数据
+                    let tableHtml = "<table class='list_table'><thead><tr>";
+                    tableHtml += "<th>商品</th><th>仓库</th><th>数量</th><th style='width: 85px'>操作</th>";
+                    tableHtml += "</thead><tbody>"
+                    for (var i = 0; i < data.length; i++) {
+                        tableHtml += "<tr><td>" + goodIdNameMap.get(data[i].goodId) + "</td>"
+                        tableHtml += "<td>" + repoIdNameMap.get(data[i].repoId) + "</td>"
+                        tableHtml += "<td>" + data[i].quantity + "</td>"
+                        tableHtml += "<td><button class='btn btn82 btn_res' onclick='putOut(" + data[i].goodId + "," + data[i].repoId + "," + data[i].quantity + ")'>出库</button> </td>"
+                    }
+                    tableHtml = tableHtml + "</tbody></table>"
+                    $(".table-responsive").empty();
+                    $('.table-responsive').append(tableHtml);
+
+                },//如果请求成功的话，要做什么操作
+                error: function () {
+                },//如果请求失败的话，要做什么操作
+            })
+        }
+
+        function putInPage() {
+            let tableHtml = "<div id='forms' class='mt10'><div class='box'><div class='box_border'>" +
+                "<div class='box_top'><b class='pl15'>货品入库</b></div><div class='box_center'>" +
+                "<form class='jqtransform'><table class='form_table pt15 pb15'>";
+            tableHtml += "<tr><td class='td_right'>商品：</td>"
+            tableHtml += "<td><select id='select-good' class='select'></select></td></tr>"
+            tableHtml += "<tr><td class='td_right'>仓库：</td>"
+            tableHtml += "<td><select id='select-repo' class='select'></select></td></tr>"
+            tableHtml += "<tr><td class='td_right'>入库数量：</td>"
+            tableHtml += "<td><input id='in-num' type='number' class='input-text lh25'></td></tr>"
+            tableHtml += "<tr><td class='td_right'><button class='ext_btn ext_btn_submit' onclick='putIn()'>确认</button></td>"
+            tableHtml += "<td class='td_center'><button class='ext_btn' onclick='getAll()'>取消</button></td></tr>"
+            tableHtml += "</table></form></div></div></div></div></div>";
+            $(".table-responsive").empty();
+            $('.table-responsive').append(tableHtml);
+            let goodIdList = goodIdNameMap.keys();
+            let goodNameList = goodIdNameMap.values();
+            let repoIdList = repoIdNameMap.keys();
+            let repoNameList = repoIdNameMap.values();
+            for (var i = 0; i < goodIdNameMap.size; i++) {
+                $("#select-good").append("<option value=" + goodIdList.next().value + ">" + goodNameList.next().value + "</option>");
+            }
+            for (var i = 0; i < repoIdNameMap.size; i++) {
+                $("#select-repo").append("<option value=" + repoIdList.next().value + ">" + repoNameList.next().value + "</option>");
+            }
+        }
+
+        function putIn() {
+            let goodId = $("#select-good").val();
+            let repoId = $("#select-repo").val();
+            let num = $("#in-num").val();
+            let sendData = "goodId=" + goodId + "&repoId=" + repoId + "&quantity=" + num;
+            $.ajax({
+                url: "inventory/putIn",
+                data: sendData,
+                type: "POST",
+                async: false,
+                success: function (data) {
+                    if (data) {
+                        alert("入库成功!")
+                        getAll();
+                    } else {
+                        alert("失败!")
+                    }
+                }
+            })
+        }
+
+        function putOut(goodId, repoId, quantity) {
+            let num = prompt("输入出库数量(当前库存" + quantity + "):");
+            if (num <= quantity) {
+                let sendData = "goodId=" + goodId + "&repoId=" + repoId + "&quantity=" + num;
+                $.ajax({
+                    url: "inventory/putOut",
+                    data: sendData,
+                    type: "POST",
+                    async: false,
+                    success: function (data) {
+                        if (data) {
+                            alert("出库成功!");
+                            getAll();
+                        }
+                    }
+                })
+            } else {
+                alert("库存不足!");
+            }
+        }
+
+    </script>
     <title>库存总览</title>
 </head>
-<body>
-
+<body style="margin: 10px" onload="getAll()">
+<div class="top-bar">
+    <button class="btn btn82 btn_export" onclick=putInPage()>入库</button>
+    <button class="btn btn82 btn_search" onclick=getAll()>刷新</button>
+</div>
+<div class="table-responsive" style="margin-top: 10px"></div>
 </body>
 </html>
