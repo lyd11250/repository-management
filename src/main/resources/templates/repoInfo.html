@@ -119,7 +119,6 @@
 
     }
     function returnInfo(){
-        saveOrUpdate = -1;
         document.getElementById('rmName').value='';
         document.getElementById('rmDepart').value='生产部';
         document.getElementById('rmManager').value='';
@@ -131,7 +130,7 @@
         // console.log("test");
         //发送的数据
         // var rmName1 = jQuery("#rmName").val();
-        returnInfo()
+
         var rmName =  $("input[name='rmName']").val();
         console.log("rmName");
         var rmDepart = $("select[name='rmDepart'] option:selected").text();
@@ -140,6 +139,7 @@
         var rmArea =  $("input[name='rmArea']").val();
         var sendData =  "rmName="+rmName+"&rmDepart="+rmDepart+"&rmManager="+rmManager+"&rmMphone="+rmMphone+"&rmArea="
             +rmArea+"&id="+id;
+        returnInfo();
         if (saveOrUpdate == -1){
             $.ajax({
                 url:"Repository/new",
@@ -165,18 +165,20 @@
                         alert("修改成功")
                         $(".table-responsive").empty();
                         getAllInfo();
+                        // saveOrUpdate = -1;
                     }else{
                         alert("修改失败")
                     }
                 }
             })
-            saveOrUpdate == -1;//改回操作标志，避免一直发送修改请求
+            saveOrUpdate = -1;//改回操作标志，避免一直发送修改请求
+
         }})
     //编辑操作
     var id = 0;
     function editRepo(Repo){
         // alert("test")
-        console.log(Repo)
+        console.log(Repo);
         var rName =  $("input[name='rmName']").val(Repo.rmName);
         var rManager =  $("input[name='rmManager']").val(Repo.rmManager);
         var rmDepart = Repo.rmDepart;
