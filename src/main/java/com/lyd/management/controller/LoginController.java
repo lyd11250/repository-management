@@ -27,24 +27,18 @@ public class LoginController {
     private EmployeeService employeeService;
 
     @PostMapping("/doLogin")
-    public String doLogin(String username, String password, Model model, HttpSession httpSession, String code) {
-        String code1 = httpSession.getAttribute("code").toString();
-        if (code1.equals(code)){
-            Employee employee = employeeService.doLogin(username, password);
+    public String doLogin(String username, String password, Model model, HttpSession httpSession) {
+        Employee employee = employeeService.doLogin(username, password);
             //  查询到的用户不存在
-            if (employee == null) {
-                model.addAttribute("error", "用户名或密码错误");
-                return "/login";
-            }else {
+        if (employee == null) {
+            model.addAttribute("error", "用户名或密码错误");
+            return "/login";
+        }else {
                 httpSession.setAttribute("currentUser",employee);
                 System.out.println("success");
                 return "/index.html";
-            }
-        }else {
-            model.addAttribute("error", "验证码错误");
-            System.out.println("验证码错误");
-            return "/login";
         }
+
     }
 
     @GetMapping("/")
