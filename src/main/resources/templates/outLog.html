@@ -19,7 +19,7 @@
                 async: false,
                 success: function(data){//data 接受后台响应数据
                     let tableHtml = "<table class='list_table'><thead><tr>";
-                    tableHtml += "<th>记录ID</th><th>货品</th><th>仓库</th><th>入库量</th><th>出库时间</th>";
+                    tableHtml += "<th>记录ID</th><th>货品</th><th>仓库</th><th>出库量</th><th>出库时间</th>";
                     tableHtml += "</thead><tbody>"
                     for(var i = 0;i<data.length;i++){
                         if(data[i].num > 0) {
